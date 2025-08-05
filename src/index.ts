@@ -20,10 +20,16 @@ app.use(cors({
     origin: "*"
 }))
 
+app.get("/", (req, res) => { 
+    res.send("Welcome to the Second Brain API");
+})
 router.use('/api/v1/user', userRouter);
 router.use('/api/v1/content', contentRouter);
 router.use('/api/v1/brain', brainRouter);
 
+app.use(router);
+
 
 connectDb();
 app.listen(3000)
+

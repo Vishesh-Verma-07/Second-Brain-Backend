@@ -38,3 +38,5 @@ yarn.lock
 
 # Misc  
 coverage/  
+
+nodemon.json

@@ -11,15 +11,24 @@ declare global {
   }
 
 export function auth(req: Request, res: Response, next: NextFunction){
-    const token = req.headers['token'];
+  // Try to get token from headers or cookies
+  const token = req.headers['token'] || req.cookies?.token;
+  
+  if (!token) {
+    res.status(401).json({message: "No token provided"});
+    return;
+  }
 
+  try {
     const decodedInfo = jwt.verify(token as string, JWT_SECRETE) as JwtPayload;
 
     if(decodedInfo && typeof decodedInfo !== 'string'){
-        req.userId = decodedInfo.userId
-        next()
+      req.userId = decodedInfo.userId;
+      next();
+    } else {
+      res.status(403).json({message: "Invalid credentials"});
     }
-    else{
-        res.status(403).json({message: "invalid credentaials"})
-    }
+  } catch (error) {
+    res.status(403).json({message: "Invalid token"});
+  }
 }
