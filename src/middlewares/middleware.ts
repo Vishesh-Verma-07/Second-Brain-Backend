@@ -12,6 +12,7 @@ declare global {
 
 export function auth(req: Request, res: Response, next: NextFunction){
   // Try to get token from headers or cookies
+
   const token = req.headers['token'] || req.cookies?.token;
   
   if (!token) {

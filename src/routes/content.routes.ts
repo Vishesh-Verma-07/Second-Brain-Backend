@@ -6,11 +6,11 @@ import { createContent, deleteContent, getAllContent } from "../controller/conte
 const contentRouter = Router();
 
 
-contentRouter.post("/content", auth, createContent)
+contentRouter.post("/create", auth, createContent)
 
 contentRouter.delete("/content", auth, deleteContent)
 
-contentRouter.get("/content", auth, getAllContent)
+contentRouter.get("/getAll", auth, getAllContent)
 
 
 export {

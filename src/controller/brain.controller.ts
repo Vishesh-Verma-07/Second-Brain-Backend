@@ -2,6 +2,8 @@
 import { Request, Response } from "express";
 import { ContentModel, LinkModel } from "../models";
 import { random } from "../utility/utils";
+import { sendResponse } from "../utility/sendResponse";
+
 
 export const brainShare = async (req: Request, res: Response) => {
     const share = req.body.share;
@@ -49,9 +51,12 @@ export const getBrainByShareLink = async (req: Request, res: Response) => {
     });
 
     if (!link) {
-        res.status(411).json({
-            message: "this brain doesnt exit"
+
+        sendResponse(res, 411, {
+            status: 'error',
+            message: "This brain doesn't exist"
         });
+        
         return;
     }
 
@@ -59,7 +64,16 @@ export const getBrainByShareLink = async (req: Request, res: Response) => {
         userId: link.userId
     }).populate("userId", '-password');
 
-    res.json({
-        content
+    if (content.length === 0) {
+        sendResponse(res, 404, {
+            status: 'error',
+            message: "No content found for this brain"
+        });
+        return;
+    }
+    sendResponse(res, 200, {
+        status: 'success',
+        message: "Content fetched successfully",
+        data: content
     });
 };

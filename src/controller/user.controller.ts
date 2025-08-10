@@ -4,10 +4,11 @@ import { z } from "zod";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { UserModel } from '../models/index';
+import { apiResponse, sendResponse } from "../utility/sendResponse";
 
 export const signup = async (req: Request, res: Response) => {
 
-    console.log(req.body);
+    // console.log(req.body);
     const requriedBody = z.object({
         username: z.string().min(3, {message: "username is too small"}).max(100, {message: "username is too long"}),
         email: z.string().email().min(3, {message: "email is too small"}).max(100, {message: "email is too long"}),
@@ -15,6 +16,8 @@ export const signup = async (req: Request, res: Response) => {
     });
 
     const parsedDataWithSafe = requriedBody.safeParse(req.body);
+
+    // console.log("parsedDataWithSafe", parsedDataWithSafe);
 
     if(!parsedDataWithSafe.success){
         res.status(403).json({
@@ -42,15 +45,18 @@ export const signup = async (req: Request, res: Response) => {
         const hashedPassword = await bcrypt.hash(password, 5);
 
 
-        await UserModel.create({
+        const user = await UserModel.create({
             username, 
             email,
             password: hashedPassword
         });
         
-        res.status(201).json({
-            message: "user signed up successfully"
+        sendResponse(res, 201, {
+            status: "success",
+            message: "User created successfully",
+            data: user
         });
+
     } catch (error) {
         res.status(500).json({
             message: "something went wrong during db entry"
@@ -90,18 +96,44 @@ export const signin = async (req: Request, res: Response) => {
     
     const token = jwt.sign({userId: user._id}, process.env.JWT_SECRETE);
 
-    // Set token in an HTTP-only cookie for better security
-    res.cookie('token', token, {
-        httpOnly: true,
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        // secure: process.env.NODE_ENV === 'production', 
-        sameSite: 'strict'
-    });
+    // Use sendResponse with cookies parameter
+    // sendResponse(res, 200, {
+    //     status: 'success',
+    //     message: 'Login successful',
+    //     data: {
+    //         user: {
+    //             id: user._id,
+    //             name: user.username,
+    //             token: token
+    //         }
+    //     }
+    // }, [
+    //     {
+    //         name: 'token',
+    //         value: token,
+    //         options: {
+    //             httpOnly: true,
+    //             secure: false,
+    //             sameSite: 'none'
+    //         }
+    //     }
+    // ]);
 
-    res.json({
-        message: "Login successful",
-        // token 
-    });
+
+    const options = {
+        httpOnly: true,
+        secure: false, // Set to true if using HTTPS
+        sameSite: 'lax' as const, // Using type assertion to specify literal type
+        // maxAge: 24 * 60 * 60 * 1000 // 1 day
+    };
+
+    res.status(200).cookie('token', token, options).json(new apiResponse(200, {
+        user: {
+            id: user._id,
+            email: user.email
+        }
+    }));
+    return;
 };
 
 

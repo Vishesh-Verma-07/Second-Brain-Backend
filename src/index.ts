@@ -5,6 +5,7 @@ import { userRouter } from './routes/user.routes'
 import { contentRouter } from './routes/content.routes'
 import { brainRouter } from './routes/brain.routes'
 import { connectDb } from './db/connect'
+import cookieParser from "cookie-parser";
 import cors from 'cors'
 
 
@@ -15,9 +16,11 @@ const router = Router();
 
 const app = express()
 app.use(express.json())
+app.use(cookieParser());
 
 app.use(cors({
-    origin: "*"
+    origin: "http://localhost:5173",
+    credentials: true
 }))
 
 app.get("/", (req, res) => { 
