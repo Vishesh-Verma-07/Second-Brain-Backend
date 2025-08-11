@@ -96,29 +96,6 @@ export const signin = async (req: Request, res: Response) => {
     
     const token = jwt.sign({userId: user._id}, process.env.JWT_SECRETE);
 
-    // Use sendResponse with cookies parameter
-    // sendResponse(res, 200, {
-    //     status: 'success',
-    //     message: 'Login successful',
-    //     data: {
-    //         user: {
-    //             id: user._id,
-    //             name: user.username,
-    //             token: token
-    //         }
-    //     }
-    // }, [
-    //     {
-    //         name: 'token',
-    //         value: token,
-    //         options: {
-    //             httpOnly: true,
-    //             secure: false,
-    //             sameSite: 'none'
-    //         }
-    //     }
-    // ]);
-
 
     const options = {
         httpOnly: true,
