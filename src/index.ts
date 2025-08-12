@@ -19,11 +19,24 @@ const app = express()
 app.use(express.json())
 app.use(cookieParser());
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://secondbrain-vis.vercel.app'
+];
+
 app.use(cors({
-    // origin: ["http://localhost:5173", "https://secondbrain-vis.vercel.app"],
-    origin: '*',
-    credentials: true
-}))
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps, curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
 
 app.get("/", (req, res) => { 
     res.send("Welcome to the Second Brain API");
