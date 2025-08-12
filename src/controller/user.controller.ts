@@ -100,7 +100,7 @@ export const signin = async (req: Request, res: Response) => {
     const options = {
         httpOnly: true,
         secure: false, // Set to true if using HTTPS
-        sameSite: 'lax' as const, // Using type assertion to specify literal type
+        sameSite: 'none' as const, // Using type assertion to specify literal type
         // maxAge: 24 * 60 * 60 * 1000 // 1 day
     };
 
