@@ -1,6 +1,6 @@
 import { Response } from "express";
 
-type ResponseStatus = "success" | "error";
+type ResponseStatus = "success" | "error" | "ok";
 
 
 interface ApiResponse<T> {

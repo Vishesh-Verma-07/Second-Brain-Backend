@@ -7,6 +7,7 @@ import { brainRouter } from './routes/brain.routes'
 import { connectDb } from './db/connect'
 import cookieParser from "cookie-parser";
 import cors from 'cors'
+import { HealthCheck } from './controller/healthCheck.controller'
 
 
 dotenv.config()
@@ -26,6 +27,8 @@ app.use(cors({
 app.get("/", (req, res) => { 
     res.send("Welcome to the Second Brain API");
 })
+
+app.get("/api/v1/health", HealthCheck);
 router.use('/api/v1/user', userRouter);
 router.use('/api/v1/content', contentRouter);
 router.use('/api/v1/brain', brainRouter);

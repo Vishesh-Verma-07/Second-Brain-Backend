@@ -108,3 +108,34 @@ export const getAllContent = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const getPostDetail = async(req: Request, res: Response) => {
+    const userId = req.userId;
+    const postId = req.params.id;
+
+    try {
+        const post = await ContentModel.findOne({
+            _id: postId,
+            userId
+        }).populate("userId", "-password").populate("tags", "title");
+
+        if (!post) {
+            res.status(404).json({
+                message: "Post not found"
+            });
+            return;
+        }
+
+        sendResponse(res, 200, {
+            status: 'success',
+            message: 'Post fetched successfully',
+            data: post
+        });
+    } catch (error) {
+        console.log(error);
+        sendResponse(res, 500, {
+            status: 'error',
+            message: "couldn't find entry"
+        });
+    }
+}
