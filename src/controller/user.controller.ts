@@ -73,7 +73,7 @@ export const signin = async (req: Request, res: Response) => {
 
     if(!user){
         res.status(403).json({
-            message: "user not found"
+            message: "User does not exist"
         });
         return;
     }
@@ -82,7 +82,7 @@ export const signin = async (req: Request, res: Response) => {
 
     if(!passwordMatch){
         res.status(403).json({
-            message: "invalid credentials"
+            message: "Password is incorrect"
         });
         return;
     }

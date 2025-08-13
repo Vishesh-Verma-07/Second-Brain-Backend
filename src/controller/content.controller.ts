@@ -53,12 +53,12 @@ export const createContent = async (req: Request, res: Response) => {
 
 export const deleteContent = async (req: Request, res: Response) => {
     const userId = req.userId;
-    const contentId = req.body.contentId;
+    const contentId = req.query.id;
     
     try {
         const content = await ContentModel.deleteOne({
             userId,
-            contentId
+            _id: contentId
         });
         
         if (content.deletedCount === 0) {

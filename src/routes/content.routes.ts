@@ -8,7 +8,7 @@ const contentRouter = Router();
 
 contentRouter.post("/create", auth, createContent)
 
-contentRouter.delete("/content", auth, deleteContent)
+contentRouter.delete("/deleteContent/:id", auth, deleteContent)
 
 contentRouter.get("/getAll", auth, getAllContent)
 
