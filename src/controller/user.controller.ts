@@ -78,7 +78,14 @@ export const signin = async (req: Request, res: Response) => {
         return;
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    if(!user.password){
+        res.status(403).json({
+            message: "User does not have password"
+        });
+        return;
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password.toString());
 
     if(!passwordMatch){
         res.status(403).json({
