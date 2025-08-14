@@ -53,7 +53,9 @@ export const createContent = async (req: Request, res: Response) => {
 
 export const deleteContent = async (req: Request, res: Response) => {
     const userId = req.userId;
-    const contentId = req.query.id;
+    const contentId = req.params.id;
+    // const contentId = 123;
+    console.log("apan delte me aa gaye")
     
     try {
         const content = await ContentModel.deleteOne({

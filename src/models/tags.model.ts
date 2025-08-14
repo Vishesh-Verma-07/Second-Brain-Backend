@@ -8,7 +8,7 @@ const Tag = new Schema({
         type: String, 
         required: true
     }
-})
+}, { timestamps: true })
 
 
 const TagModel = mongoose.model("Tags", Tag)

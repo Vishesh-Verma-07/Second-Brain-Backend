@@ -12,7 +12,7 @@ const Link = new Schema({
         required: true,
         unique: true
     }
-})
+}, { timestamps: true })
 
 
 const LinkModel = mongoose.model("links", Link)

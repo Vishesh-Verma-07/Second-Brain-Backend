@@ -15,8 +15,16 @@ const User = new Schema({
     password: {
         type: String, 
         required: true
-    }
-})
+    }, 
+    content: [{
+        type: Types.ObjectId,
+        ref: 'contents'
+    }], 
+    collections: [{
+        type: Types.ObjectId,
+        ref: 'collections'
+    }]
+}, { timestamps: true })
 
 
 const UserModel = mongoose.model('users', User)
